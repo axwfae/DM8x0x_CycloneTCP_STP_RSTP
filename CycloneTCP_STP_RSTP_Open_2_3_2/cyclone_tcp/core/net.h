@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.3.2
+ * @version 2.3.0
  **/
 
 #ifndef _NET_H
@@ -87,19 +87,20 @@ struct _NetInterface;
  *
  * #define GPL_LICENSE_TERMS_ACCEPTED
  */
+ #define GPL_LICENSE_TERMS_ACCEPTED
 
 #ifndef GPL_LICENSE_TERMS_ACCEPTED
    #error Before compiling CycloneTCP Open, you must accept the terms of the GPL license
 #endif
 
 //Version string
-#define CYCLONE_TCP_VERSION_STRING "2.3.2"
+#define CYCLONE_TCP_VERSION_STRING "2.3.0"
 //Major version
 #define CYCLONE_TCP_MAJOR_VERSION 2
 //Minor version
 #define CYCLONE_TCP_MINOR_VERSION 3
 //Revision number
-#define CYCLONE_TCP_REV_NUMBER 2
+#define CYCLONE_TCP_REV_NUMBER 0
 
 //RTOS support
 #ifndef NET_RTOS_SUPPORT
