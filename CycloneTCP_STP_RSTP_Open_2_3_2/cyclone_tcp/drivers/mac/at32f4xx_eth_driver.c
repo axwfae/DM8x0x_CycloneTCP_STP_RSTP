@@ -25,8 +25,13 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.3.2
+ * @version 2.3.0
  **/
+
+#define  DM8x0x_RMII_REF_50M_OUT_en           0
+#define  AT32F_25M_CLK_OUT_en                 0
+#define  AT32F_50M_CLK_OUT_en                 1
+
 
 //Switch to the appropriate trace level
 #define TRACE_LEVEL NIC_TRACE_LEVEL
@@ -143,6 +148,12 @@ error_t at32f4xxEthInit(NetInterface *interface)
    crm_periph_reset(CRM_EMAC_PERIPH_RESET, TRUE);
    crm_periph_reset(CRM_EMAC_PERIPH_RESET, FALSE);
 
+#if DM8x0x_RMII_REF_50M_OUT_en
+//   at32f4xxEthWritePhyReg(SMI_OPCODE_WRITE, 0x18, 0x14, (0x0108 | 1 << 5));   //dm8x06  p4_50M_out
+//   at32f4xxEthWritePhyReg(SMI_OPCODE_WRITE, 0x18, 0x15, (0x8108 | 1 << 5));   //dm8x06  p5_50M_out
+#endif
+   
+   
    //Perform a software reset
    EMAC_DMA->bm |= EMAC_DMA_BM_SWR;
    //Wait for the reset to complete
@@ -158,6 +169,7 @@ error_t at32f4xxEthInit(NetInterface *interface)
    {
       //Ethernet PHY initialization
       error = interface->phyDriver->init(interface);
+   	interface->phyAddr = 0x00;      
    }
    else if(interface->switchDriver != NULL)
    {
@@ -354,9 +366,16 @@ __weak_func void at32f4xxEthInitGpio(NetInterface *interface)
    //Remap CLKOUT1 pin
    gpio_pin_mux_config(GPIOA, GPIO_PINS_SOURCE8, GPIO_MUX_0);
 
+   
    //Configure CLKOUT1 pin to output PLLCLK/10 clock (25MHz)
    crm_clock_out1_set(CRM_CLKOUT1_PLL);
+#if AT32F_25M_CLK_OUT_en
    crm_clkout_div_set(CRM_CLKOUT_INDEX_1, CRM_CLKOUT_DIV1_5, CRM_CLKOUT_DIV2_2);
+#else
+#if AT32F_50M_CLK_OUT_en
+   crm_clkout_div_set(CRM_CLKOUT_INDEX_1, CRM_CLKOUT_DIV1_5, CRM_CLKOUT_DIV2_1);   
+#endif
+#endif
 
    //Configure RMII pins
    gpio_init_struct.gpio_out_type = GPIO_OUTPUT_PUSH_PULL;
@@ -414,9 +433,9 @@ __weak_func void at32f4xxEthInitGpio(NetInterface *interface)
 
    //Reset PHY transceiver
    gpio_bits_write(GPIOE, GPIO_PINS_15, FALSE);
-   sleep(10);
+   sleep(100);
    gpio_bits_write(GPIOE, GPIO_PINS_15, TRUE);
-   sleep(10);
+   sleep(100);
 #endif
 }
 
