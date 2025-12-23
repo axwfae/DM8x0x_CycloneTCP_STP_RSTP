@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.3.0
+ * @version 2.3.2
  **/
 
 #define  DM8x0x_RMII_REF_50M_OUT_en           0
