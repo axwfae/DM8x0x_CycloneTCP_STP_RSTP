@@ -25,7 +25,7 @@
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * @author Oryx Embedded SARL (www.oryx-embedded.com)
- * @version 2.3.2
+ * @version 2.3.0
  **/
 
 //Switch to the appropriate trace level
@@ -35,6 +35,8 @@
 #include "core/net.h"
 #include "drivers/phy/dm9162_driver.h"
 #include "debug.h"
+
+#define  DM8x0x_VP_mode_en           1
 
 
 /**
@@ -60,7 +62,7 @@ const PhyDriver dm9162PhyDriver =
 error_t dm9162Init(NetInterface *interface)
 {
    //Debug message
-   TRACE_INFO("Initializing DM9162...\r\n");
+   TRACE_INFO("Initializing DM9162... %d \r\n", interface->phyAddr);
 
    //Undefined PHY address?
    if(interface->phyAddr >= 32)
@@ -72,12 +74,14 @@ error_t dm9162Init(NetInterface *interface)
    //Initialize serial management interface
    if(interface->smiDriver != NULL)
    {
+      TRACE_INFO("interface->smiDriver->init() \r\n");
       interface->smiDriver->init();
    }
 
    //Initialize external interrupt line driver
    if(interface->extIntDriver != NULL)
    {
+      TRACE_INFO("interface->extIntDriver() \r\n");
       interface->extIntDriver->init();
    }
 
@@ -195,10 +199,14 @@ void dm9162DisableIrq(NetInterface *interface)
 void dm9162EventHandler(NetInterface *interface)
 {
    uint16_t value;
-   bool_t end;
+   //bool_t end;
 
    //Read status register to acknowledge the interrupt
+#if DM8x0x_VP_mode_en
+   value = 0xffff;
+#else
    value = dm9162ReadPhyReg(interface, DM9162_MDINTR);
+#endif
 
    //Link status change?
    if((value & DM9162_MDINTR_LINK_CHANGE) != 0)
@@ -211,6 +219,13 @@ void dm9162EventHandler(NetInterface *interface)
       //Link is up?
       if((value & DM9162_BMSR_LINK_STATUS) != 0)
       {
+#if DM8x0x_VP_mode_en
+			TRACE_INFO("sw link up \r\n");
+				 
+         //100BASE-TX full-duplex
+         interface->linkSpeed = NIC_LINK_SPEED_100MBPS;
+         interface->duplexMode = NIC_FULL_DUPLEX_MODE;
+#else
          //Wait for the auto-negotiation to complete
          do
          {
@@ -269,7 +284,8 @@ void dm9162EventHandler(NetInterface *interface)
             //Debug message
             TRACE_WARNING("Invalid operation mode!\r\n");
          }
-
+#endif
+         
          //Update link state
          interface->linkState = TRUE;
 
@@ -278,6 +294,9 @@ void dm9162EventHandler(NetInterface *interface)
       }
       else
       {
+#if DM8x0x_VP_mode_en
+			TRACE_INFO("sw link down \r\n");
+#endif         
          //Update link state
          interface->linkState = FALSE;
       }
