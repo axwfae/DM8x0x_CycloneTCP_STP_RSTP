@@ -61,6 +61,8 @@
  * #define GPL_LICENSE_TERMS_ACCEPTED
  */
 
+#define GPL_LICENSE_TERMS_ACCEPTED
+
 #ifndef GPL_LICENSE_TERMS_ACCEPTED
    #error Before compiling CycloneCRYPTO Open, you must accept the terms of the GPL license
 #endif
@@ -1079,3 +1081,4 @@ struct _PrngAlgo
 #endif
 
 #endif
+
