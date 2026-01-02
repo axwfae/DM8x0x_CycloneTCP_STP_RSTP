@@ -38,7 +38,6 @@
 #define DM8x03_MAC_TABLE_SIZE                  2048
 
 //Port identifiers
-#define DM8x03_PORT_VIRTUAL                    1
 #define DM8x03_PORT0                           2
 #define DM8x03_PORT1                           3
 #define DM8x03_PORT2                           4
@@ -54,9 +53,6 @@
 #define DM8x03_PORT0_MASK                      0x01
 #define DM8x03_PORT1_MASK                      0x02
 #define DM8x03_PORT2_MASK                      0x04
-#define DM8x03_PORT3_MASK                      0x08
-#define DM8x03_PORT4_MASK                      0x10
-#define DM8x03_PORT5_MASK                      0x20
 
 //DM8x03 PHY registers
 #define DM8x03_BMCR                            0x00
@@ -65,8 +61,8 @@
 #define DM8x03_PHYID2                          0x03
 #define DM8x03_ANAR                            0x04
 #define DM8x03_ANLPAR                          0x05
-#define DM8x03_ANER                            0x03
-#define DM8x03_GENERAL_REGISTERS_RANGE             0x03
+#define DM8x03_ANER                            0x06
+#define DM8x03_GENERAL_REGISTERS_RANGE             0x06
 
 //PHY Control register
 #define DM8x03_BMCR_SW_RESET                   0x8000
@@ -189,6 +185,7 @@
 #define DM8x03 SWITCH_RESET                                    0x211
 #define DM8x03_SWITCH_CONTROL                                  0x212
 #define DM8x03_CPU_PORT_AND_MIRROR_CONTROL                     0x213
+#define DM8x03_CPU_PORT_AND_MIRROR_CONTROL_DEFAULT                 0x0000
 #define DM8x03_SPECIAL_TAG_TX_ENABLE                               (1 << 7) //to cpu
 #define DM8x03_SPECIAL_TAG_RX_ENABLE                               (1 << 6) //from cpu
 #define DM8x03_SPECIAL_TAG_ETHER_TYPE                          0x214
@@ -209,6 +206,10 @@
 //0x270 ~ 0x27f
 
 //0x292
+#define DM8x03_STP_CONTROL                                     0x292
+#define DM8x03_STP_CONTROL_DEFAULT                                 0x0000
+#define DM8x03_STP_EN                                              (1 << 0)
+
 
 #define DM8x03_SNOOPING_CONTROL_0                              0x29B
 #define DM8x03_IGMP_SNOOPING_HW_EN                                 (1 << 0)
@@ -231,33 +232,33 @@
 #define DM8x03_ATB_INDEX_MAC                                       (0)
 
 #define DM8x03_ADDRESS_TABLE_DATA_0                            0x2B1
-#define DM8x03_ADDRESS_TABLE_PORT_SET                               DM8x03_ADDRESS_TABLE_DATA_0
-#define DM8x03_ADDRESS_TABLE_SET_PORT(port)                         (port - 2)
-#define DM8x03_ADDRESS_TABLE_GET_PORT(port)                         ((port & 0x07) + 2)
-#define DM8x03_ADDRESS_TABLE_SET_MAP(port)                          (1 << (port - 2))
+#define DM8x03_ADDRESS_TABLE_PORT_SET                              DM8x03_ADDRESS_TABLE_DATA_0
+#define DM8x03_ADDRESS_TABLE_SET_PORT(port)                        (port - 2)
+#define DM8x03_ADDRESS_TABLE_GET_PORT(port)                        ((port & 0x07) + 2)
+#define DM8x03_ADDRESS_TABLE_SET_MAP(port)                         (1 << (port - 2))
 
 #define DM8x03_ADDRESS_TABLE_DATA_1                            0x2B2
-#define DM8x03_ADDRESS_TABLE_INDEX_SET                              DM8x03_ADDRESS_TABLE_DATA_1
+#define DM8x03_ADDRESS_TABLE_INDEX_SET                             DM8x03_ADDRESS_TABLE_DATA_1
 #define DM8x03_ADDRESS_TABLE_DATA_2                            0x2B3
 #define DM8x03_ADDRESS_TABLE_DATA_3                            0x2B4
-#define DM8x03_ADDRESS_TABLE_MULTICAST_BIT                          (0x0100)
+#define DM8x03_ADDRESS_TABLE_MULTICAST_BIT                         (0x0100)
 #define DM8x03_ADDRESS_TABLE_DATA_4                            0x2B5
-#define DM8x03_ADDRESS_TABLE_STATIC_AND_IGMP                        DM8x03_ADDRESS_TABLE_DATA_4
-#define DM8x03_ADDRESS_TABLE_STATIC_EN                              (1 << 0)
-//#define DM8x03_ADDRESS_TABLE_STATIC_EN                              ((1 << 0) | (1 << 2))
-#define DM8x03_ADDRESS_TABLE_OVERRIDE_EN                            (1 << 1)
-#define DM8x03_ADDRESS_TABLE_AUTH_EN                                (1 << 2)
-#define DM8x03_ADDRESS_TABLE_IGMP_EN                                (1 << 12)
+#define DM8x03_ADDRESS_TABLE_STATIC_AND_IGMP                       DM8x03_ADDRESS_TABLE_DATA_4
+#define DM8x03_ADDRESS_TABLE_STATIC_EN                             (1 << 0)
+//#define DM8x03_ADDRESS_TABLE_STATIC_EN                             ((1 << 0) | (1 << 2))
+#define DM8x03_ADDRESS_TABLE_OVERRIDE_EN                           (1 << 1)
+#define DM8x03_ADDRESS_TABLE_AUTH_EN                               (1 << 2)
+#define DM8x03_ADDRESS_TABLE_IGMP_EN                               (1 << 12)
 
 /*
       ATB_STATIC  = Reg2B5h.[00]     // Static Entry
       ATB_OVERRIDE= Reg2B5h.[01]     // Overriding Entry
-      ATB_AUTH    = Reg2B5h.[02]     // Authorization Entry 
+      ATB_AUTH    = Reg2B5h.[02]     // Authorization Entry
       ATB_CVLAN   = Reg2B5h.[03]     // Cross VLAN
       ATB_MIRR    = Reg2B5h.[04]     // Mirror
       ATB_TXTAG   = Reg2B5h.[06:05]  // TX Tagging Control
       ATB_PRIEN   = Reg2B5h.[07]     // ATB_PRI Enable
-      ATB_PRI     = Reg2B5h.[09:08]  // Priority Queue ID 
+      ATB_PRI     = Reg2B5h.[09:08]  // Priority Queue ID
       ATB_FILTER  = Reg2B5h.[11:10]  // Filter Control
 */
 
@@ -288,26 +289,23 @@
 #define DM8x03_PORTn_STP_STATE_LEARNING                            0x02
 #define DM8x03_PORTn_STP_STATE_BLOCKING                            0x03
 #define DM8x03_PORTn_STP_STATE_LISTENING                           0x03
+#define DM8x03_PORTn_STP_STATE_BLOCKING_LISTENING                  0x03
 
 #define DM8x03_PORTn_RSTP_STATE_FORWARDING                         0x00
 #define DM8x03_PORTn_RSTP_STATE_DISCARDING                         0x01
 #define DM8x03_PORTn_RSTP_STATE_LEARNING                           0x02
 
-#define DM8x03_PORTn_AGING_DISABLE                                (1 << 13)
-#define DM8x03_PORTn_PRT_NUM(port)                                (port -2)
-#define DM8x03_PORTn_PORT_STATUS_LINK                             (1 << 0)
-#define DM8x03_PORTn_PORT_STATUS_FULL                             (1 << 1)
-#define DM8x03_PORTn_PORT_STATUS_100M                             (1 << 2)
-#define DM8x03_PORTn_PORT_UNKNOWN_MULTICAST_DIS                   (1 << 7) 
+#define DM8x03_PORTn_AGING_DISABLE                                 (1 << 13)
+#define DM8x03_PORTn_PRT_NUM(port)                                 (port -2)
+#define DM8x03_PORTn_PORT_STATUS_LINK                              (1 << 0)
+#define DM8x03_PORTn_PORT_STATUS_FULL                              (1 << 1)
+#define DM8x03_PORTn_PORT_STATUS_100M                              (1 << 2)
+#define DM8x03_PORTn_PORT_UNKNOWN_MULTICAST_DIS                    (1 << 7)
 
-#define DM8x03_MONITOR_REGISTER_1_VIRTUAL_PHY_EN                  (1 << 9)
-#define DM8x03_VIRTUAL_PHY_CONTROL_OR_MODE                        (1 << 8)
-#define DM8x03_VIRTUAL_PHY_CONTROL_MAP                            (0x0f)    
-
-#define DM8x03_SPECIAL_TAG_MAP_EN                                 (1 << 6)
-#define DM8x03_SPECIAL_TAG_MAP_TX_PORT(port)                      (1 << (port - 2))
-#define DM8x03_SPECIAL_TAG_MAP_RX_PORT(port)                      (port + 2)
-#define DM8x03_SPECIAL_TAG_UNTAG                                  (2 << 0)
+#define DM8x03_SPECIAL_TAG_MAP_EN                                  (1 << 6)
+#define DM8x03_SPECIAL_TAG_MAP_TX_PORT(port)                       (1 << (port - 2))
+#define DM8x03_SPECIAL_TAG_MAP_RX_PORT(port)                       (port + 2)
+#define DM8x03_SPECIAL_TAG_UNTAG                                   (2 << 0)
 
 //C++ guard
 #ifdef __cplusplus
@@ -328,18 +326,15 @@ void dm8x03DisableIrq(NetInterface *interface);
 
 void dm8x03EventHandler(NetInterface *interface);
 
-error_t dm8x03TagFrame(NetInterface *interface, NetBuffer *buffer,
-   size_t *offset, NetTxAncillary *ancillary);
+error_t dm8x03TagFrame(NetInterface *interface, NetBuffer *buffer, size_t *offset, NetTxAncillary *ancillary);
 
-error_t dm8x03UntagFrame(NetInterface *interface, uint8_t **frame,
-   size_t *length, NetRxAncillary *ancillary);
+error_t dm8x03UntagFrame(NetInterface *interface, uint8_t **frame, size_t *length, NetRxAncillary *ancillary);
 
 bool_t dm8x03GetLinkState(NetInterface *interface, uint8_t port);
 uint32_t dm8x03GetLinkSpeed(NetInterface *interface, uint8_t port);
 NicDuplexMode dm8x03GetDuplexMode(NetInterface *interface, uint8_t port);
 
-void dm8x03SetPortState(NetInterface *interface, uint8_t port,
-   SwitchPortState state);
+void dm8x03SetPortState(NetInterface *interface, uint8_t port, SwitchPortState state);
 
 SwitchPortState dm8x03GetPortState(NetInterface *interface, uint8_t port);
 
@@ -349,36 +344,29 @@ void dm8x03EnableIgmpSnooping(NetInterface *interface, bool_t enable);
 void dm8x03EnableMldSnooping(NetInterface *interface, bool_t enable);
 void dm8x03EnableRsvdMcastTable(NetInterface *interface, bool_t enable);
 
-error_t dm8x03AddStaticFdbEntry(NetInterface *interface,
-   const SwitchFdbEntry *entry);
+error_t dm8x03AddStaticFdbEntry(NetInterface *interface, const SwitchFdbEntry *entry);
 
-error_t dm8x03DeleteStaticFdbEntry(NetInterface *interface,
-   const SwitchFdbEntry *entry);
+error_t dm8x03DeleteStaticFdbEntry(NetInterface *interface, const SwitchFdbEntry *entry);
 
-error_t dm8x03GetStaticFdbEntry(NetInterface *interface, uint_t index,
-   SwitchFdbEntry *entry);
+error_t dm8x03GetStaticFdbEntry(NetInterface *interface, uint_t index, SwitchFdbEntry *entry);
 
 void dm8x03FlushStaticFdbTable(NetInterface *interface);
 
-error_t dm8x03GetDynamicFdbEntry(NetInterface *interface, uint_t index,
-   SwitchFdbEntry *entry);
+error_t dm8x03GetDynamicFdbEntry(NetInterface *interface, uint_t index, SwitchFdbEntry *entry);
 
 void dm8x03FlushDynamicFdbTable(NetInterface *interface, uint8_t port);
 
-void dm8x03SetUnknownMcastFwdPorts(NetInterface *interface,
-   bool_t enable, uint32_t forwardPorts);
+void dm8x03SetUnknownMcastFwdPorts(NetInterface *interface, bool_t enable, uint32_t forwardPorts);
 
 
-void dm8x03WritePhyReg(NetInterface *interface, uint8_t port,
-   uint8_t address, uint16_t data);
+void dm8x03WritePhyReg(NetInterface *interface, uint8_t port, uint8_t address, uint16_t data);
 
-uint16_t dm8x03ReadPhyReg(NetInterface *interface, uint8_t port,
-   uint8_t address);
+uint16_t dm8x03ReadPhyReg(NetInterface *interface, uint8_t port, uint8_t address);
 
 void dm8x03DumpPhyReg(NetInterface *interface, uint8_t port);
 
-void dm8x03WriteSwitchAbsoluteReg(NetInterface *interface, uint16_t address, uint16_t data);
-uint16_t dm8x03ReadSwitchAbsoluteReg(NetInterface *interface, uint16_t address);
+void dm8x03WriteSwitchReg(NetInterface *interface, uint16_t address, uint16_t data);
+uint16_t dm8x03ReadSwitchReg(NetInterface *interface, uint16_t address);
 
 uint16_t dm8x03_ATP_Wait_busy(NetInterface *interface);
 uint8_t dm8x03Port_Map_2_Port_Num(uint8_t port_map);

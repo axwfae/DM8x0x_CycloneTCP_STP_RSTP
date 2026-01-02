@@ -34,8 +34,7 @@
 //Dependencies
 #include "core/nic.h"
 
-//DM8806 function
-#define DM8x06_DEVICE_IS_DM8806                0 //TRUE
+#define DEVICE_IS_DM8806                       0
 
 //Size of of the MAC address lookup table
 #define DM8x06_MAC_TABLE_SIZE                  2048
@@ -51,7 +50,7 @@
 
 //PHY address
 #define DM8x06_PHY_ADDR                        0
-#define DM8x06_CPU_PORT                        DM8x06_PORT5 // DM8x06_PORT5
+#define DM8x06_CPU_PORT                        DM8x06_PORT5 // DM8x06_PORT4
 #define DM_SWITCH_NUM_PORTS                    (DM8x06_CPU_PORT - 1)
 #define DM8x06_CPU_PORT_SET(x)                 (x - 2)
 
@@ -72,7 +71,7 @@
 #define DM8x06_ANAR                            0x04
 #define DM8x06_ANLPAR                          0x05
 #define DM8x06_ANER                            0x06
-#define DM8x06_GENERAL_REGISTERS_RANGE             0x06
+#define DM8x06_GENERAL_REGISTERS_RANGE             0x03
 
 //PHY Control register
 #define DM8x06_BMCR_SW_RESET                   0x8000
@@ -157,25 +156,25 @@
 #define DM8x06_PORT_0_DISCARD_PACKET_LIMITATION                0x11B
 #define DM8x06_PORT_0_ENERGY_EFFICIENT_ETHERNET_CONTROL        0x11E
 
-#define DM8x06_PORTn_PORT_STATUS(port)                            (DM8x06_PORT_0_PORT_STATUS + ((port - 2) * 0x20))
-#define DM8x06_PORTn_BASIC_CONTROL_0(port)                        (DM8x06_PORT_0_BASIC_CONTROL_0 + ((port - 2) * 0x20))
-#define DM8x06_PORTn_BASIC_CONTROL_0_RX_DIS                       (1 << 1)
-#define DM8x06_PORTn_BASIC_CONTROL_0_TX_DIS                       (1 << 0)
-#define DM8x06_PORTn_BASIC_CONTROL_0_ADLRN_DIS                    (1 << 12)
+#define DM8x06_PORTn_PORT_STATUS(port)                             (DM8x06_PORT_0_PORT_STATUS + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BASIC_CONTROL_0(port)                         (DM8x06_PORT_0_BASIC_CONTROL_0 + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BASIC_CONTROL_0_RX_DIS                        (1 << 1)
+#define DM8x06_PORTn_BASIC_CONTROL_0_TX_DIS                        (1 << 0)
+#define DM8x06_PORTn_BASIC_CONTROL_0_ADLRN_DIS                     (1 << 12)
 
-#define DM8x06_PORTn_BASIC_CONTROL_1(port)                        (DM8x06_PORT_0_BASIC_CONTROL_1 + ((port - 2) * 0x20))
-#define DM8x06_PORTn_BASIC_CONTROL_1_FIRUUSID_EN                  (1 << 9)
+#define DM8x06_PORTn_BASIC_CONTROL_1(port)                         (DM8x06_PORT_0_BASIC_CONTROL_1 + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BASIC_CONTROL_1_FIRUUSID_EN                   (1 << 9)
 
-#define DM8x06_PORTn_BLOCK_CONTROL_0(port)                        (DM8x06_PORT_0_BLOCK_CONTROL_0 + ((port - 2) * 0x20))
-#define DM8x06_PORTn_BLOCK_CONTROL_1(port)                        (DM8x06_PORT_0_BLOCK_CONTROL_1 + ((port - 2) * 0x20))
-#define DM8x06_PORTn_BANDWIDTH_CONTROL(port)                      (DM8x06_PORT_0_BANDWIDTH_CONTROL + ((port - 2) * 0x20))
-#define DM8x06_PORTn_VLAN_TAG_INFOMATION(port)                    (DM8x06_PORT_0_VLAN_TAG_INFOMATION + ((port - 2) * 0x20))
-#define DM8x06_PORTn_PRIORITY_AND_VLAN_CONTROL(port)              (DM8x06_PORT_0_PRIORITY_AND_VLAN_CONTROL + ((port - 2) * 0x20))
-#define DM8x06_PORTn_SECURITY_CONTROL(port)                       (DM8x06_PORT_0_SECURITY_CONTROL + ((port - 2) * 0x20))
-#define DM8x06_PORTn_SPANNING_TREE_STATE_CONTROL(port)            (DM8x06_PORT_0_SPANNING_TREE_STATE_CONTROL + ((port - 2) * 0x20))
-#define DM8x06_PORTn_MEMORY_CONFIGURATION(port)                   (DM8x06_PORT_0_MEMORY_CONFIGURATION + ((port - 2) * 0x20))
-#define DM8x06_PORTn_DISCARD_PACKET_LIMITATION(port)              (DM8x06_PORT_0_DISCARD_PACKET_LIMITATION + ((port - 2) * 0x20))
-#define DM8x06_PORTn_ENERGY_EFFICIENT_ETHERNET_CONTROL(port)      (DM8x06_PORT_0_ENERGY_EFFICIENT_ETHERNET_CONTROL + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BLOCK_CONTROL_0(port)                         (DM8x06_PORT_0_BLOCK_CONTROL_0 + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BLOCK_CONTROL_1(port)                         (DM8x06_PORT_0_BLOCK_CONTROL_1 + ((port - 2) * 0x20))
+#define DM8x06_PORTn_BANDWIDTH_CONTROL(port)                       (DM8x06_PORT_0_BANDWIDTH_CONTROL + ((port - 2) * 0x20))
+#define DM8x06_PORTn_VLAN_TAG_INFOMATION(port)                     (DM8x06_PORT_0_VLAN_TAG_INFOMATION + ((port - 2) * 0x20))
+#define DM8x06_PORTn_PRIORITY_AND_VLAN_CONTROL(port)               (DM8x06_PORT_0_PRIORITY_AND_VLAN_CONTROL + ((port - 2) * 0x20))
+#define DM8x06_PORTn_SECURITY_CONTROL(port)                        (DM8x06_PORT_0_SECURITY_CONTROL + ((port - 2) * 0x20))
+#define DM8x06_PORTn_SPANNING_TREE_STATE_CONTROL(port)             (DM8x06_PORT_0_SPANNING_TREE_STATE_CONTROL + ((port - 2) * 0x20))
+#define DM8x06_PORTn_MEMORY_CONFIGURATION(port)                    (DM8x06_PORT_0_MEMORY_CONFIGURATION + ((port - 2) * 0x20))
+#define DM8x06_PORTn_DISCARD_PACKET_LIMITATION(port)               (DM8x06_PORT_0_DISCARD_PACKET_LIMITATION + ((port - 2) * 0x20))
+#define DM8x06_PORTn_ENERGY_EFFICIENT_ETHERNET_CONTROL(port)       (DM8x06_PORT_0_ENERGY_EFFICIENT_ETHERNET_CONTROL + ((port - 2) * 0x20))
 
 #define DM8x06_PORT_1_PORT_STATUS                              0x130
 #define DM8x06_PORT_1_BASIC_CONTROL_0                          0x131
@@ -277,6 +276,11 @@
 #define DM8x06_SPEIAL_PACKET_CONTROL_7                         0x23B
 #define DM8x06_SPEIAL_PACKET_CONTROL_8                         0x23C
 
+#define DM8x06_STP_CONTROL                                     0x292
+#define DM8x06_STP_EN                                              (1 << 0)
+#define DM8x06_STP_CONTROL_DEFAULT                                 0x00
+
+
 #define DM8x06_SNOOPING_CONTROL_0                              0x29B
 #define DM8x06_IGMP_SNOOPING_HW_EN                                 (1 << 0)
 #define DM8x06_MLD_SNOOPING_HW_EN                                  (1 << 1)
@@ -286,45 +290,45 @@
 #define DM8x06_ATB_BUSY                                            (1 << 15)
 #define DM8x06_ATB_CR_ERR                                          (1 << 14)
 #define DM8x06_ATB_CR_ENTRY_DONE                                   (1 << 13)
-#define DM8x06_ATB_CLEAN_PORT_EN                                   (1 << 5)                      
+#define DM8x06_ATB_CLEAN_PORT_EN                                   (1 << 5)
 #define DM8x06_ATB_CMD_READ                                        (0 << 2)
 #define DM8x06_ATB_CMD_WRITE                                       (1 << 2)
 #define DM8x06_ATB_CMD_DELETE                                      (2 << 2)
 #define DM8x06_ATB_CMD_SEARCH                                      (3 << 2)
-#define DM8X06_ATB_CMD_CLEAN                                       (4 << 2)
-#define DM8X06_ATB_INDEX_UNICAST                                   (0)
-#define DM8X06_ATB_INDEX_MULTICAST                                 (1)
-#define DM8X06_ATB_INDEX_IGMP                                      (2)
-#define DM8X06_ATB_INDEX_MAC                                       (0)
+#define DM8x06_ATB_CMD_CLEAN                                       (4 << 2)
+#define DM8x06_ATB_INDEX_UNICAST                                   (0)
+#define DM8x06_ATB_INDEX_MULTICAST                                 (1)
+#define DM8x06_ATB_INDEX_IGMP                                      (2)
+#define DM8x06_ATB_INDEX_MAC                                       (0)
 
 #define DM8x06_ADDRESS_TABLE_DATA_0                            0x2B1
-#define DM8X06_ADDRESS_TABLE_PORT_SET                               DM8x06_ADDRESS_TABLE_DATA_0
-#define DM8X06_ADDRESS_TABLE_SET_PORT(port)                         (port - 2)
-#define DM8X06_ADDRESS_TABLE_GET_PORT(port)                         ((port & 0x07) + 2)
-#define DM8X06_ADDRESS_TABLE_SET_MAP(port)                          (1 << (port - 2))
+#define DM8x06_ADDRESS_TABLE_PORT_SET                              DM8x06_ADDRESS_TABLE_DATA_0
+#define DM8x06_ADDRESS_TABLE_SET_PORT(port)                        (port - 2)
+#define DM8x06_ADDRESS_TABLE_GET_PORT(port)                        ((port & 0x07) + 2)
+#define DM8x06_ADDRESS_TABLE_SET_MAP(port)                         (1 << (port - 2))
 
 #define DM8x06_ADDRESS_TABLE_DATA_1                            0x2B2
-#define DM8x06_ADDRESS_TABLE_INDEX_SET                              DM8x06_ADDRESS_TABLE_DATA_1
+#define DM8x06_ADDRESS_TABLE_INDEX_SET                             DM8x06_ADDRESS_TABLE_DATA_1
 #define DM8x06_ADDRESS_TABLE_DATA_2                            0x2B3
 #define DM8x06_ADDRESS_TABLE_DATA_3                            0x2B4
-#define DM8x06_ADDRESS_TABLE_MULTICAST_BIT                          (0x0100)
+#define DM8x06_ADDRESS_TABLE_MULTICAST_BIT                         (0x0100)
 #define DM8x06_ADDRESS_TABLE_DATA_4                            0x2B5
-#define DM8x06_ADDRESS_TABLE_STATIC_AND_IGMP                        DM8x06_ADDRESS_TABLE_DATA_4
-#define DM8x06_ADDRESS_TABLE_STATIC_EN                              (1 << 0)
-//#define DM8x06_ADDRESS_TABLE_STATIC_EN                              ((1 << 0) | (1 << 2))
-#define DM8x06_ADDRESS_TABLE_OVERRIDE_EN                            (1 << 1)
-#define DM8x06_ADDRESS_TABLE_AUTH_EN                                (1 << 2)
-#define DM8x06_ADDRESS_TABLE_IGMP_EN                                (1 << 12)
+#define DM8x06_ADDRESS_TABLE_STATIC_AND_IGMP                       DM8x06_ADDRESS_TABLE_DATA_4
+#define DM8x06_ADDRESS_TABLE_STATIC_EN                             (1 << 0)
+//#define DM8x06_ADDRESS_TABLE_STATIC_EN                             ((1 << 0) | (1 << 2))
+#define DM8x06_ADDRESS_TABLE_OVERRIDE_EN                           (1 << 1)
+#define DM8x06_ADDRESS_TABLE_AUTH_EN                               (1 << 2)
+#define DM8x06_ADDRESS_TABLE_IGMP_EN                               (1 << 12)
 
 /*
       ATB_STATIC  = Reg2B5h.[00]     // Static Entry
       ATB_OVERRIDE= Reg2B5h.[01]     // Overriding Entry
-      ATB_AUTH    = Reg2B5h.[02]     // Authorization Entry 
+      ATB_AUTH    = Reg2B5h.[02]     // Authorization Entry
       ATB_CVLAN   = Reg2B5h.[03]     // Cross VLAN
       ATB_MIRR    = Reg2B5h.[04]     // Mirror
       ATB_TXTAG   = Reg2B5h.[06:05]  // TX Tagging Control
       ATB_PRIEN   = Reg2B5h.[07]     // ATB_PRI Enable
-      ATB_PRI     = Reg2B5h.[09:08]  // Priority Queue ID 
+      ATB_PRI     = Reg2B5h.[09:08]  // Priority Queue ID
       ATB_FILTER  = Reg2B5h.[11:10]  // Filter Control
 */
 
@@ -364,26 +368,27 @@
 #define DM8x06_PORTn_STP_STATE_LEARNING                            0x02
 #define DM8x06_PORTn_STP_STATE_BLOCKING                            0x03
 #define DM8x06_PORTn_STP_STATE_LISTENING                           0x03
+#define DM8x06_PORTn_STP_STATE_BLOCKING_LISTENING                  0x03
 
 #define DM8x06_PORTn_RSTP_STATE_FORWARDING                         0x00
 #define DM8x06_PORTn_RSTP_STATE_DISCARDING                         0x01
 #define DM8x06_PORTn_RSTP_STATE_LEARNING                           0x02
 
-#define DM8x06_PORTn_AGING_DISABLE                                (1 << 13)
-#define DM8x06_PORTn_PRT_NUM(port)                                (port -2)
-#define DM8x06_PORTn_PORT_STATUS_LINK                             (1 << 0)
-#define DM8x06_PORTn_PORT_STATUS_FULL                             (1 << 1)
-#define DM8x06_PORTn_PORT_STATUS_100M                             (1 << 2)
-#define DM8x06_PORTn_PORT_UNKNOWN_MULTICAST_DIS                   (1 << 7) 
+#define DM8x06_PORTn_AGING_DISABLE                                 (1 << 13)
+#define DM8x06_PORTn_PRT_NUM(port)                                 (port -2)
+#define DM8x06_PORTn_PORT_STATUS_LINK                              (1 << 0)
+#define DM8x06_PORTn_PORT_STATUS_FULL                              (1 << 1)
+#define DM8x06_PORTn_PORT_STATUS_100M                              (1 << 2)
+#define DM8x06_PORTn_PORT_UNKNOWN_MULTICAST_DIS                    (1 << 7)
 
-#define DM8x06_MONITOR_REGISTER_1_VIRTUAL_PHY_EN                  (1 << 9)
-#define DM8x06_VIRTUAL_PHY_CONTROL_OR_MODE                        (1 << 8)
-#define DM8x06_VIRTUAL_PHY_CONTROL_MAP                            (0x0f)    
+#define DM8x06_MONITOR_REGISTER_1_VIRTUAL_PHY_EN                   (1 << 9)
+#define DM8x06_VIRTUAL_PHY_CONTROL_OR_MODE                         (1 << 8)
+#define DM8x06_VIRTUAL_PHY_CONTROL_MAP                             (0x0f)
 
-#define DM8X06_SPECIAL_TAG_MAP_EN                                 (1 << 6)
-#define DM8X06_SPECIAL_TAG_MAP_TX_PORT(port)                      (1 << (port - 2))
-#define DM8X06_SPECIAL_TAG_MAP_RX_PORT(port)                      (port + 2)
-#define DM8X06_SPECIAL_TAG_UNTAG                                  (2 << 0)
+#define DM8x06_SPECIAL_TAG_MAP_EN                                  (1 << 6)
+#define DM8x06_SPECIAL_TAG_MAP_TX_PORT(port)                       (1 << (port - 2))
+#define DM8x06_SPECIAL_TAG_MAP_RX_PORT(port)                       (port + 2)
+#define DM8x06_SPECIAL_TAG_UNTAG                                   (2 << 0)
 
 //C++ guard
 #ifdef __cplusplus
@@ -404,18 +409,15 @@ void dm8x06DisableIrq(NetInterface *interface);
 
 void dm8x06EventHandler(NetInterface *interface);
 
-error_t dm8x06TagFrame(NetInterface *interface, NetBuffer *buffer,
-   size_t *offset, NetTxAncillary *ancillary);
+error_t dm8x06TagFrame(NetInterface *interface, NetBuffer *buffer, size_t *offset, NetTxAncillary *ancillary);
 
-error_t dm8x06UntagFrame(NetInterface *interface, uint8_t **frame,
-   size_t *length, NetRxAncillary *ancillary);
+error_t dm8x06UntagFrame(NetInterface *interface, uint8_t **frame, size_t *length, NetRxAncillary *ancillary);
 
 bool_t dm8x06GetLinkState(NetInterface *interface, uint8_t port);
 uint32_t dm8x06GetLinkSpeed(NetInterface *interface, uint8_t port);
 NicDuplexMode dm8x06GetDuplexMode(NetInterface *interface, uint8_t port);
 
-void dm8x06SetPortState(NetInterface *interface, uint8_t port,
-   SwitchPortState state);
+void dm8x06SetPortState(NetInterface *interface, uint8_t port, SwitchPortState state);
 
 SwitchPortState dm8x06GetPortState(NetInterface *interface, uint8_t port);
 
@@ -425,36 +427,29 @@ void dm8x06EnableIgmpSnooping(NetInterface *interface, bool_t enable);
 void dm8x06EnableMldSnooping(NetInterface *interface, bool_t enable);
 void dm8x06EnableRsvdMcastTable(NetInterface *interface, bool_t enable);
 
-error_t dm8x06AddStaticFdbEntry(NetInterface *interface,
-   const SwitchFdbEntry *entry);
+error_t dm8x06AddStaticFdbEntry(NetInterface *interface, const SwitchFdbEntry *entry);
 
-error_t dm8x06DeleteStaticFdbEntry(NetInterface *interface,
-   const SwitchFdbEntry *entry);
+error_t dm8x06DeleteStaticFdbEntry(NetInterface *interface, const SwitchFdbEntry *entry);
 
-error_t dm8x06GetStaticFdbEntry(NetInterface *interface, uint_t index,
-   SwitchFdbEntry *entry);
+error_t dm8x06GetStaticFdbEntry(NetInterface *interface, uint_t index, SwitchFdbEntry *entry);
 
 void dm8x06FlushStaticFdbTable(NetInterface *interface);
 
-error_t dm8x06GetDynamicFdbEntry(NetInterface *interface, uint_t index,
-   SwitchFdbEntry *entry);
+error_t dm8x06GetDynamicFdbEntry(NetInterface *interface, uint_t index, SwitchFdbEntry *entry);
 
 void dm8x06FlushDynamicFdbTable(NetInterface *interface, uint8_t port);
 
-void dm8x06SetUnknownMcastFwdPorts(NetInterface *interface,
-   bool_t enable, uint32_t forwardPorts);
+void dm8x06SetUnknownMcastFwdPorts(NetInterface *interface, bool_t enable, uint32_t forwardPorts);
 
 
-void dm8x06WritePhyReg(NetInterface *interface, uint8_t port,
-   uint8_t address, uint16_t data);
+void dm8x06WritePhyReg(NetInterface *interface, uint8_t port, uint8_t address, uint16_t data);
 
-uint16_t dm8x06ReadPhyReg(NetInterface *interface, uint8_t port,
-   uint8_t address);
+uint16_t dm8x06ReadPhyReg(NetInterface *interface, uint8_t port, uint8_t address);
 
 void dm8x06DumpPhyReg(NetInterface *interface, uint8_t port);
 
-void dm8x06WriteSwitchAbsoluteReg(NetInterface *interface, uint16_t address, uint16_t data);
-uint16_t dm8x06ReadSwitchAbsoluteReg(NetInterface *interface, uint16_t address);
+void dm8x06WriteSwitchReg(NetInterface *interface, uint16_t address, uint16_t data);
+uint16_t dm8x06ReadSwitchReg(NetInterface *interface, uint16_t address);
 
 uint16_t dm8x06_ATP_Wait_busy(NetInterface *interface);
 uint8_t dm8x06Port_Map_2_Port_Num(uint8_t port_map);
