@@ -31,11 +31,10 @@
 //Switch to the appropriate trace level
 //#define TRACE_LEVEL NIC_TRACE_LEVEL
 
-//#define TRACE_LEVEL                            TRACE_LEVEL_INFO
-#define TRACE_LEVEL                            TRACE_LEVEL_DEBUG
+#define TRACE_LEVEL                            TRACE_LEVEL_INFO
 
 #define TX_PACK_DUMP_ENABLE                    0
-#define RX_PACK_DUMP_ENABLE                    1
+#define RX_PACK_DUMP_ENABLE                    0
 
 //Dependencies
 #include "core/net.h"
@@ -1509,3 +1508,4 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
