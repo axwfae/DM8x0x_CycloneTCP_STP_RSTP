@@ -296,7 +296,7 @@ __weak_func void dm8x06InitHook(NetInterface *interface)
  * @brief DM8x06 timer handler
  * @param[in] interface Underlying network interface
  **/
-void dm8x06Tick(NetInterface *interface) {
+__weak_func void dm8x06Tick(NetInterface *interface) {
     uint_t port;
     bool_t linkState;
 
@@ -368,7 +368,7 @@ void dm8x06DisableIrq(NetInterface *interface) {
  * @brief DM8x06 event handler
  * @param[in] interface Underlying network interface
  **/
-void dm8x06EventHandler(NetInterface *interface) {
+__weak_func void dm8x06EventHandler(NetInterface *interface) {
     uint_t port;
     bool_t linkState;
 
@@ -1628,4 +1628,5 @@ uint8_t dm8x06Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
