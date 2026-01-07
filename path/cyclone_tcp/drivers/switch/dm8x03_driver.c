@@ -205,7 +205,7 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
 
     if(monitor_reg_31c & (1 << 4)) {
         uint16_t monitor_reg_315 = dm8x03ReadSwitchReg(interface, DM8x03_PORT_2_MAC_CONTROL);
-        TRACE_INFO("DM8x02 p2 link force mode \r\n");
+        TRACE_INFO("DM8x02 p2 link force mode value %04x\r\n", monitor_reg_315);
 
         if(monitor_reg_315 & (1 << 2)) {
             TRACE_INFO("DM8x03 p2 link down mode \r\n");
@@ -236,7 +236,7 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
  * @brief DM8x03 timer handler
  * @param[in] interface Underlying network interface
  **/
-void dm8x03Tick(NetInterface *interface) {
+__weak_func void dm8x03Tick(NetInterface *interface) {
     uint_t port;
     bool_t linkState;
 
@@ -308,7 +308,7 @@ void dm8x03DisableIrq(NetInterface *interface) {
  * @brief DM8x03 event handler
  * @param[in] interface Underlying network interface
  **/
-void dm8x03EventHandler(NetInterface *interface) {
+__weak_func void dm8x03EventHandler(NetInterface *interface) {
     uint_t port;
     bool_t linkState;
 
@@ -1508,4 +1508,5 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
