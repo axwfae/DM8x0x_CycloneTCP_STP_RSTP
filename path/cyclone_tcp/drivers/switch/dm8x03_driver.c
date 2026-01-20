@@ -494,7 +494,7 @@ error_t dm8x03TagFrame(
     error_t error;
 
 #if (ETH_PORT_TAGGING_SUPPORT == ENABLED)
-    EthHeader *header = netBufferAt(buffer, 0);
+    EthHeader *header = netBufferAt(buffer, *offset);
 
     error = NO_ERROR;
 
@@ -1556,6 +1556,7 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
