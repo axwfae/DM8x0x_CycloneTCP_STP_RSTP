@@ -407,6 +407,54 @@ __weak_func void dm8x03EventHandler(NetInterface *interface) {
 }
 
 
+void netBuffer_dump_prt(uint8_t * prt_head, const NetBuffer *src, size_t srcOffset)
+{
+   uint_t i;
+   uint_t n;
+   size_t totalLength;
+   uint8_t *p;
+   size_t length = netBufferGetLength(src) - srcOffset;
+
+   uint16_t prt_point = 0;
+   uint16_t prt_cnt = 0;
+
+   //Total number of bytes copied
+   totalLength = 0;
+
+   TRACE_DEBUG(" ===== %s =====", prt_head);
+
+   //Loop through data chunks
+   for(i = 0; i < src->chunkCount && totalLength < length; i++)
+   {
+      //Is there any data to copy from the current chunk?
+      if(srcOffset < src->chunk[i].length)
+      {
+         //Point to the first byte to be read
+         p = (uint8_t *) src->chunk[i].address + srcOffset;
+         //Compute the number of bytes to copy at a time
+         n = MIN(length - totalLength, src->chunk[i].length - srcOffset);
+
+         for(prt_cnt = 0; prt_cnt < n; prt_cnt++) {
+             if(!(prt_point % 16)) TRACE_DEBUG("\r\n 0x%04X :", prt_point);
+             TRACE_DEBUG(" 0x%02X", p[prt_cnt]);
+             prt_point++;
+         }
+
+         //Total number of bytes copied
+         totalLength += n;
+         //Process the next block from the start
+         srcOffset = 0;
+      }
+      else
+      {
+         //Skip the current chunk
+         srcOffset -= src->chunk[i].length;
+      }
+   }
+    TRACE_DEBUG("\r\n\n");
+}
+
+
 void pack_dump_prt(uint8_t * prt_head, uint8_t * out_data, size_t out_len)
 {
     uint16_t prt_point;
@@ -483,7 +531,7 @@ error_t dm8x03TagFrame(
         }
 
 #if TX_PACK_DUMP_ENABLE
-        pack_dump_prt((uint8_t *) "tx_out" , (uint8_t *)header, netBufferGetLength(buffer));
+		netBuffer_dump_prt((uint8_t *) "tx_out", buffer, *offset);
 #endif
     } else {
         //The port number is not valid
@@ -1508,5 +1556,6 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
