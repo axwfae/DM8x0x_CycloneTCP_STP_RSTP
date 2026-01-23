@@ -568,7 +568,8 @@ error_t dm8x06TagFrame(
 
         //Is there enough space for the special tag?
     if(ancillary->port < DM8x06_CPU_PORT) {
-        if((*offset >= sizeof(SpecialTag_Tx)) && (0 != ancillary->port)) {
+//        if((*offset >= sizeof(SpecialTag_Tx)) && (0 != ancillary->port)) {
+        if((*offset >= sizeof(SpecialTag_Tx)) && (ancillary->port >= DM8x06_PORT0)) {
             SpecialTag_Tx *SPTag_tx;
 
             //Make room for the special tag
@@ -1674,6 +1675,7 @@ uint8_t dm8x06Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
