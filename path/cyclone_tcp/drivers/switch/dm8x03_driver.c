@@ -510,7 +510,8 @@ error_t dm8x03TagFrame(
 
     //Valid port?
     if(ancillary->port < DM8x03_CPU_PORT) {
-        if((*offset >= sizeof(SpecialTag_Tx)) && (0 != ancillary->port)) {
+//        if((*offset >= sizeof(SpecialTag_Tx)) && (0 != ancillary->port)) {
+        if((*offset >= sizeof(SpecialTag_Tx)) && (ancillary->port >= DM8x03_PORT0)) {
             SpecialTag_Tx *SPTag_tx;
 
             //Make room for the special tag
@@ -1556,6 +1557,7 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
