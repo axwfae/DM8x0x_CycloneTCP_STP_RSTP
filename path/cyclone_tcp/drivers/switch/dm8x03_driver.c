@@ -197,10 +197,10 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
     TRACE_INFO("==========================================\r\n");
 
     switch(monitor_reg_31c & ((1 << 3) | (1 << 2))) {
-        case ((0 << 3) | (0 << 2)) : TRACE_INFO("DM8x03 p2 MII error \r\n"); break;
-        case ((0 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 RevMII mode \r\n");break;
-        case ((1 << 3) | (0 << 2)) : TRACE_INFO("DM8x03 p2 RMII mode \r\n");break;
-        case ((1 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 Error mode \r\n");break;
+        case ((0 << 3) | (0 << 2)) : TRACE_INFO("DM8x03 p2 MII error \r\n");  break;
+        case ((0 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 RevMII mode \r\n"); break;
+        case ((1 << 3) | (0 << 2)) : TRACE_INFO("DM8x03 p2 RMII mode \r\n"); break;
+        case ((1 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 Error mode \r\n"); break;
     }
 
     if(monitor_reg_31c & (1 << 4)) {
@@ -214,10 +214,10 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
 
             dm8x03WriteSwitchReg(interface, DM8x03_PORT_2_MAC_CONTROL, monitor_reg_315); //fix full mode
             switch(monitor_reg_315 & ((1 << 1) | (1 << 0))) {
-                case ((0 << 1) | (0 << 0)) : TRACE_INFO("DM8x03 p2 100M Full \r\n");break;
-                case ((0 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Full \r\n");break;
-                case ((1 << 1) | (0 << 0)) : TRACE_INFO("DM8x03 p2 100M Half \r\n");break;
-                case ((1 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Half \r\n");break;
+                case ((0 << 1) | (0 << 0)) : TRACE_INFO("DM8x03 p2 100M Full \r\n"); break;
+                case ((0 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Full \r\n"); break;
+                case ((1 << 1) | (0 << 0)) : TRACE_INFO("DM8x03 p2 100M Half \r\n"); break;
+                case ((1 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Half \r\n"); break;
             }
         }
     } else {
@@ -1530,15 +1530,9 @@ uint8_t dm8x03Port_Map_2_Port_Num(uint8_t port_map) {
     uint8_t new_port_map = port_map >> 2;
 
     switch(new_port_map & DM8x03_PORT_MASK) {
-        case DM8x03_PORT0_MASK :
-            port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT0);
-            break;
-        case DM8x03_PORT1_MASK :
-            port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT1);
-            break;
-        case DM8x03_PORT2_MASK :
-            port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT2);
-            break;
+        case DM8x03_PORT0_MASK : port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT0); break;
+        case DM8x03_PORT1_MASK : port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT1); break;
+        case DM8x03_PORT2_MASK : port_num = DM8x03_ADDRESS_TABLE_SET_PORT(DM8x03_PORT2); break;
     }
 
     return port_num;
@@ -1551,6 +1545,7 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
