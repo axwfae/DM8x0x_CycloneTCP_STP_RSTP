@@ -206,14 +206,12 @@ __weak_func void dm8x06InitHook(NetInterface *interface)
     switch(monitor_reg_31e & ((1 << 11) | (1 << 10) | (1 << 9))) {
         case ((0 << 11) | (0 << 10) | (0 << 9)) : TRACE_INFO("DM8x06 p4 TP/FX mode \r\n"); break;
 
-        case ((1 << 11) | (0 << 10) | (0 << 9)) :
-        {
-
+        case ((1 << 11) | (0 << 10) | (0 << 9)) : {
             switch((monitor_reg_31d & (1 << 15)) | (monitor_reg_31c & (1 << 8))) {
                 case ((0 << 15) | (0 << 8)) : TRACE_INFO("DM8x06 p4 RevMII Trubo mode \r\n"); break;
-                case ((0 << 15) | (1 << 8)) : TRACE_INFO("DM8x06 p4 RMII mode \r\n");break;
-                case ((1 << 15) | (0 << 8)) : TRACE_INFO("DM8x06 p4 MII mode \r\n");break;
-                case ((1 << 15) | (1 << 8)) : TRACE_INFO("DM8x06 p4 RevMII mode \r\n");break;
+                case ((0 << 15) | (1 << 8)) : TRACE_INFO("DM8x06 p4 RMII mode \r\n"); break;
+                case ((1 << 15) | (0 << 8)) : TRACE_INFO("DM8x06 p4 MII mode \r\n"); break;
+                case ((1 << 15) | (1 << 8)) : TRACE_INFO("DM8x06 p4 RevMII mode \r\n"); break;
             }
 
             if(monitor_reg_31c & (1 << 1)) {
@@ -224,16 +222,16 @@ __weak_func void dm8x06InitHook(NetInterface *interface)
                 if(monitor_reg_31d & (1 << 14)) {
                     switch(monitor_reg_31c & ((1 << 7) | (1 << 6))) {
                         case ((0 << 7) | (0 << 6)) : TRACE_INFO("DM8x06 p4 10M Half \r\n"); break;
-                        case ((0 << 7) | (1 << 6)) : TRACE_INFO("DM8x06 p4 10M Full \r\n");break;
-                        case ((1 << 7) | (0 << 6)) : TRACE_INFO("DM8x06 p4 100M Half \r\n");break;
-                        case ((1 << 7) | (1 << 6)) : TRACE_INFO("DM8x06 p4 100M Full \r\n");break;
+                        case ((0 << 7) | (1 << 6)) : TRACE_INFO("DM8x06 p4 10M Full \r\n"); break;
+                        case ((1 << 7) | (0 << 6)) : TRACE_INFO("DM8x06 p4 100M Half \r\n"); break;
+                        case ((1 << 7) | (1 << 6)) : TRACE_INFO("DM8x06 p4 100M Full \r\n"); break;
                     }
                 } else {
                     TRACE_INFO("DM8x06 p4 link down mode \r\n");
                 }
             }
+            break;
         }
-        break;
 
         default: TRACE_INFO("DM8x06 p4 mode error\r\n"); break;
     }
@@ -245,9 +243,9 @@ __weak_func void dm8x06InitHook(NetInterface *interface)
 
     switch(monitor_reg_31d & ((1 << 11) | (1 << 10))) {
         case ((0 << 11) | (0 << 10)) : TRACE_INFO("DM8x06 p5 mode error \r\n"); break;
-        case ((0 << 11) | (1 << 10)) : TRACE_INFO("DM8x06 p5 RMII mode \r\n");break;
-        case ((1 << 11) | (0 << 10)) : TRACE_INFO("DM8x06 p5 MII mode \r\n");break;
-        case ((1 << 11) | (1 << 10)) : TRACE_INFO("DM8x06 p5 RevMII mode \r\n");break;
+        case ((0 << 11) | (1 << 10)) : TRACE_INFO("DM8x06 p5 RMII mode \r\n"); break;
+        case ((1 << 11) | (0 << 10)) : TRACE_INFO("DM8x06 p5 MII mode \r\n"); break;
+        case ((1 << 11) | (1 << 10)) : TRACE_INFO("DM8x06 p5 RevMII mode \r\n"); break;
     }
 
     if(monitor_reg_31c & (1 << 2)) {
@@ -257,10 +255,10 @@ __weak_func void dm8x06InitHook(NetInterface *interface)
 
         if(monitor_reg_31d & (1 << 12)) {
             switch(monitor_reg_31d & ((1 << 9) | (1 << 8))) {
-                case ((0 << 9) | (0 << 8)) : TRACE_INFO("DM8x06 p5 10M Half \r\n");break;
-                case ((0 << 9) | (1 << 8)) : TRACE_INFO("DM8x06 p5 10M Full \r\n");break;
-                case ((1 << 9) | (0 << 8)) : TRACE_INFO("DM8x06 p5 100M Half \r\n");break;
-                case ((1 << 9) | (1 << 8)) : TRACE_INFO("DM8x06 p5 100M Full \r\n");break;
+                case ((0 << 9) | (0 << 8)) : TRACE_INFO("DM8x06 p5 10M Half \r\n"); break;
+                case ((0 << 9) | (1 << 8)) : TRACE_INFO("DM8x06 p5 10M Full \r\n"); break;
+                case ((1 << 9) | (0 << 8)) : TRACE_INFO("DM8x06 p5 100M Half \r\n"); break;
+                case ((1 << 9) | (1 << 8)) : TRACE_INFO("DM8x06 p5 100M Full \r\n"); break;
             }
         } else {
             TRACE_INFO("DM8x06 p5 link down mode \r\n");
@@ -407,29 +405,27 @@ __weak_func void dm8x06EventHandler(NetInterface *interface) {
                         virtualInterface->linkState = TRUE;
                         //Process link state change event
                         nicNotifyLinkChange(virtualInterface);
-                    }
-                    else if(!linkState && virtualInterface->linkState) { //Link down event
+                    } else if(!linkState && virtualInterface->linkState) { //Link down event
                         //Update link state
                         virtualInterface->linkState = FALSE;
                         //Process link state change event
                         nicNotifyLinkChange(virtualInterface);
                     }
-                }								
-                else if (port == DM8x06_CPU_PORT) {
-                        //Retrieve host interface speed
-                        interface->linkSpeed = dm8x06GetLinkSpeed(interface, DM8x06_CPU_PORT);
-                        //Retrieve host interface duplex mode
-                        interface->duplexMode = dm8x06GetDuplexMode(interface, DM8x06_CPU_PORT);
-                        //Adjust MAC configuration parameters for proper operation
-                        interface->nicDriver->updateMacConfig(interface);
-                        //Check current speed
-                        virtualInterface->linkSpeed = interface->linkSpeed;
-                        //Check current duplex mode
-                        virtualInterface->duplexMode = interface->duplexMode;
-                        //Update link state
-                        virtualInterface->linkState = TRUE;
-                        //Process link state change event
-                        nicNotifyLinkChange(virtualInterface);
+                } else if (port == DM8x06_CPU_PORT) {
+                    //Retrieve host interface speed
+                    interface->linkSpeed = dm8x06GetLinkSpeed(interface, DM8x06_CPU_PORT);
+                    //Retrieve host interface duplex mode
+                    interface->duplexMode = dm8x06GetDuplexMode(interface, DM8x06_CPU_PORT);
+                    //Adjust MAC configuration parameters for proper operation
+                    interface->nicDriver->updateMacConfig(interface);
+                    //Check current speed
+                    virtualInterface->linkSpeed = interface->linkSpeed;
+                    //Check current duplex mode
+                    virtualInterface->duplexMode = interface->duplexMode;
+                    //Update link state
+                    virtualInterface->linkState = TRUE;
+                    //Process link state change event
+                    nicNotifyLinkChange(virtualInterface);
                 }
             }
         }
@@ -483,11 +479,9 @@ void netBuffer_dump_prt(uint8_t * prt_head, const NetBuffer *src, size_t srcOffs
    TRACE_DEBUG(" ===== %s =====", prt_head);
 
    //Loop through data chunks
-   for(i = 0; i < src->chunkCount && totalLength < length; i++)
-   {
+   for(i = 0; i < src->chunkCount && totalLength < length; i++) {
       //Is there any data to copy from the current chunk?
-      if(srcOffset < src->chunk[i].length)
-      {
+      if(srcOffset < src->chunk[i].length) {
          //Point to the first byte to be read
          p = (uint8_t *) src->chunk[i].address + srcOffset;
          //Compute the number of bytes to copy at a time
@@ -1646,23 +1640,17 @@ uint8_t dm8x06Port_Map_2_Port_Num(uint8_t port_map) {
 
     switch(new_port_map & DM8x06_PORT_MASK) {
         case DM8x06_PORT0_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT0);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT0); break;
         case DM8x06_PORT1_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT1);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT1); break;
         case DM8x06_PORT2_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT2);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT2); break;
         case DM8x06_PORT3_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT3);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT3); break;
         case DM8x06_PORT4_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT4);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT4); break;
         case DM8x06_PORT5_MASK :
-            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT5);
-            break;
+            port_num = DM8x06_ADDRESS_TABLE_SET_PORT(DM8x06_PORT5); break;
     }
 
     return port_num;
@@ -1675,6 +1663,7 @@ uint8_t dm8x06Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
