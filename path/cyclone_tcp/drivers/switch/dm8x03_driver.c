@@ -201,7 +201,7 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
         case ((0 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 RevMII mode \r\n");break;
         case ((1 << 3) | (0 << 2)) : TRACE_INFO("DM8x03 p2 RMII mode \r\n");break;
         case ((1 << 3) | (1 << 2)) : TRACE_INFO("DM8x03 p2 Error mode \r\n");break;
-            }
+    }
 
     if(monitor_reg_31c & (1 << 4)) {
         uint16_t monitor_reg_315 = dm8x03ReadSwitchReg(interface, DM8x03_PORT_2_MAC_CONTROL);
@@ -209,7 +209,7 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
 
         if(monitor_reg_315 & (1 << 2)) {
             TRACE_INFO("DM8x03 p2 link down mode \r\n");
-                } else {
+        } else {
             monitor_reg_315 &= ~(1 << 1);
 
             dm8x03WriteSwitchReg(interface, DM8x03_PORT_2_MAC_CONTROL, monitor_reg_315); //fix full mode
@@ -218,8 +218,8 @@ __weak_func void dm8x03InitHook(NetInterface *interface)
                 case ((0 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Full \r\n");break;
                 case ((1 << 1) | (0 << 0)) : TRACE_INFO("DM8x03 p2 100M Half \r\n");break;
                 case ((1 << 1) | (1 << 0)) : TRACE_INFO("DM8x03 p2 10M Half \r\n");break;
-                }
             }
+        }
     } else {
         TRACE_INFO("DM8x03 p5 link polling mode \r\n");
     }
@@ -347,15 +347,13 @@ __weak_func void dm8x03EventHandler(NetInterface *interface) {
                         virtualInterface->linkState = TRUE;
                         //Process link state change event
                         nicNotifyLinkChange(virtualInterface);
-                    }
-                    else if(!linkState && virtualInterface->linkState) { //Link down event
+                    } else if(!linkState && virtualInterface->linkState) { //Link down event
                         //Update link state
                         virtualInterface->linkState = FALSE;
                         //Process link state change event
                         nicNotifyLinkChange(virtualInterface);
                     }
-                }
-                else if (port == DM8x03_CPU_PORT) {
+                } else if (port == DM8x03_CPU_PORT) {
                         //Retrieve host interface speed
                         interface->linkSpeed = dm8x03GetLinkSpeed(interface, DM8x03_CPU_PORT);
                         //Retrieve host interface duplex mode
@@ -424,11 +422,9 @@ void netBuffer_dump_prt(uint8_t * prt_head, const NetBuffer *src, size_t srcOffs
    TRACE_DEBUG(" ===== %s =====", prt_head);
 
    //Loop through data chunks
-   for(i = 0; i < src->chunkCount && totalLength < length; i++)
-   {
+   for(i = 0; i < src->chunkCount && totalLength < length; i++) {
       //Is there any data to copy from the current chunk?
-      if(srcOffset < src->chunk[i].length)
-      {
+      if(srcOffset < src->chunk[i].length) {
          //Point to the first byte to be read
          p = (uint8_t *) src->chunk[i].address + srcOffset;
          //Compute the number of bytes to copy at a time
@@ -444,9 +440,7 @@ void netBuffer_dump_prt(uint8_t * prt_head, const NetBuffer *src, size_t srcOffs
          totalLength += n;
          //Process the next block from the start
          srcOffset = 0;
-      }
-      else
-      {
+      } else {
          //Skip the current chunk
          srcOffset -= src->chunk[i].length;
       }
@@ -1557,6 +1551,7 @@ uint8_t dm8x03Port_Num_2_Port_Map(uint8_t port_num) {
 
     return port_map;
 }
+
 
 
 
